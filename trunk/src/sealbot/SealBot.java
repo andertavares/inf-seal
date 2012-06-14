@@ -10,22 +10,35 @@ import java.util.Vector;
 
 import behavior.Behavior;
 
+/**
+ * The SealBot
+ * @author Anderson, Gabriel, Renato and Sergio
+ *
+ * Implements the Singleton design pattern
+ */
 public class SealBot extends Controller {
-	List<Behavior> behaviorList;
+	private List<Behavior> behaviorList;
 	private Vector<Car> opponentData;
+	private SensorModel mySensors;
+	
+	
 	
 	public SealBot(){
 		behaviorList = new ArrayList<Behavior>();
+		opponentData = new Vector<Car>();
 		//TODO: adicionar no behaviorList um item pra cada comportamento
+		
 	}
 
 	@Override
 	public Action control(SensorModel sensors) {
 		
-		//atualiza a situacao dos oponentes dadas as novas leituras dos sensores
+		mySensors = sensors; //update my sensors with the new readings
+		
+		//updates opponent status given new sensor readings
 		updateOpponents(sensors.getOpponentSensors());
 		
-		//procura o melhor comportamento (de maior score) na lista
+		//searches for the best behavior (highest score) on the list
 		Behavior bestBehavior = null;
 		double bestScore = Double.NEGATIVE_INFINITY;
 		
@@ -36,8 +49,27 @@ public class SealBot extends Controller {
 				bestScore = currentScore;
 			}
 		}
-		
+		if (bestBehavior == null) {
+			System.out.println("Warning: no best behavior was found");
+			return new Action();
+		}
 		return bestBehavior.control(sensors);
+	}
+	
+	/**
+	 * Returns the car vector containing the opponnent data
+	 * @return
+	 */
+	public Vector<Car> getOpponentData(){
+		return opponentData;
+	}
+	
+	/**
+	 * Returns the current sensor readings
+	 * @return
+	 */
+	public SensorModel getSensors(){
+		return mySensors;
 	}
 	
 	/** 
@@ -46,7 +78,6 @@ public class SealBot extends Controller {
 	 * 
 	 * @param opponents The opponents distances as double.
 	 */
-	@SuppressWarnings("unchecked")
 	public void updateOpponents(double[] opponents)
 	{
 		Vector<Car> previousOpponents = (Vector<Car>)opponentData.clone();
@@ -129,14 +160,13 @@ public class SealBot extends Controller {
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		opponentData.clear();
+		System.out.println("SealBot restarting.");
 	}
 
 	@Override
 	public void shutdown() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("SealBot shutting down.");
 	}
 
 }
