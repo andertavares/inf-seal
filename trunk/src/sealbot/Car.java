@@ -1,6 +1,6 @@
 package sealbot;
 
-class Car
+public class Car
 {
 	private int sector;
 	private double distance;
