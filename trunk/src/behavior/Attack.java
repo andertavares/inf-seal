@@ -14,7 +14,7 @@ public class Attack extends Behavior {
 	public double score(SensorModel sensors, Vector<Car> opponentData) {
 		// TODO Auto-generated method stub
 		
-		//highestScore = zzzzzzzzz;
+		highestScore = opponentData.firstElement();
 		return 1;
 	}
 
@@ -24,7 +24,7 @@ public class Attack extends Behavior {
 		//angle = sensor['minOpponentsAngle']
 		Action action = new Action();
         action.accelerate = 1;
-        action.steering = highestScore.getAngle() / Math.PI;
+        action.steering = - highestScore.getAngle() / Math.PI;
 
         return action;
 		
