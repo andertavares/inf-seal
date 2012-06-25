@@ -8,6 +8,8 @@ import sealbot.Car;
 
 public abstract class Behavior {
 	
+	protected Car highestScore;
+	
 	abstract public double score(SensorModel sensors, Vector<Car> opponentData);
 	abstract public Action control(SensorModel sensors);
 	
