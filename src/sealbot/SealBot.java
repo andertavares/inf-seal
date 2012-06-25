@@ -8,7 +8,9 @@ import java.util.Vector;
 
 //import sealbot.Car;
 
+import behavior.Attack;
 import behavior.Behavior;
+import behavior.LookingForOpponents;
 
 /**
  * The SealBot
@@ -21,13 +23,33 @@ public class SealBot extends Controller {
 	private Vector<Car> opponentData;
 	private SensorModel mySensors;
 	
+	final int[]  gearUp={8500,9000,9500,9500,9500,0}; //Renato
+	final int[]  gearDown={0,3300,6200,7000,7300,7700};
 	
+	//final int[]  gearUp={9500,9500,9500,10000,10000,0}; //Gabriel
+	//final int[]  gearDown={0,2500,3000,3000,3500,3500};
+	
+	//private static final int[]  gearUp = {9500, 9400, 9500, 9500, 9500, 0}; //Sergio/Anderson
+	//private static final int[]  gearDown =  {0, 3300, 6200, 7000, 7300, 7700};
+
+	
+	/* Clutching Constants */
+	final float clutchMax	= (float) 0.5;
+	final float clutchDelta	=(float) 0.05;
+	final float clutchRange	=(float) 0.82;
+	final float	clutchDeltaTime = (float) 0.02;
+	final float clutchDeltaRaced = 10;
+	final float clutchDec	=(float) 0.01;
+	final float clutchMaxModifier=(float) 1.3;
+	final float clutchMaxTime=(float) 1.5;
 	
 	public SealBot(){
 		behaviorList = new ArrayList<Behavior>();
 		opponentData = new Vector<Car>();
 		//TODO: adicionar no behaviorList um item pra cada comportamento
 		
+		behaviorList.add(new LookingForOpponents());
+		behaviorList.add(new Attack());
 	}
 
 	@Override
@@ -53,7 +75,52 @@ public class SealBot extends Controller {
 			System.out.println("Warning: no best behavior was found");
 			return new Action();
 		}
-		return bestBehavior.control(sensors);
+		Action a = bestBehavior.control(sensors);
+		System.out.println("vel:" + sensors.getSpeed());
+		
+		
+		//a.clutch = clutching(sensors, );
+		a.gear = getGear(sensors);
+		
+		return a;
+	}
+	
+	float clutching(SensorModel sensors, float clutch)
+	{
+	  	 
+	  float maxClutch = clutchMax;
+
+	  // Check if the current situation is the race start
+	  if (sensors.getCurrentLapTime()<clutchDeltaTime  && getStage()==Stage.RACE && sensors.getDistanceRaced()<clutchDeltaRaced)
+	    clutch = maxClutch;
+
+	  // Adjust the current value of the clutch
+	  if(clutch > 0)
+	  {
+	    double delta = clutchDelta;
+	    if (sensors.getGear() < 2)
+		{
+	      // Apply a stronger clutch output when the gear is one and the race is just started
+		  delta /= 2;
+	      maxClutch *= clutchMaxModifier;
+	      if (sensors.getCurrentLapTime() < clutchMaxTime)
+	        clutch = maxClutch;
+		}
+
+	    // check clutch is not bigger than maximum values
+		clutch = Math.min(maxClutch,clutch);
+
+		// if clutch is not at max value decrease it quite quickly
+		if (clutch!=maxClutch)
+		{
+		  clutch -= delta;
+		  clutch = Math.max((float) 0.0,clutch);
+		}
+		// if clutch is at max value decrease it very slowly
+		else
+			clutch -= clutchDec;
+	  }
+	  return clutch;
 	}
 	
 	/**
@@ -70,6 +137,27 @@ public class SealBot extends Controller {
 	 */
 	public SensorModel getSensors(){
 		return mySensors;
+	}
+	
+	
+	private int getGear(SensorModel sensors){
+	    int gear = sensors.getGear();
+	    double rpm  = sensors.getRPM();
+
+	    // if gear is 0 (N) or -1 (R) just return 1 
+	    if (gear<1)
+	        return 1;
+	    // check if the RPM value of car is greater than the one suggested 
+	    // to shift up the gear from the current one     
+	    if (gear <6 && rpm >= gearUp[gear-1])
+	        return gear + 1;
+	    else
+	    	// check if the RPM value of car is lower than the one suggested 
+	    	// to shift down the gear from the current one
+	        if (gear > 1 && rpm <= gearDown[gear-1])
+	            return gear - 1;
+	        else // otherwhise keep current gear
+	            return gear;
 	}
 	
 	/** 
