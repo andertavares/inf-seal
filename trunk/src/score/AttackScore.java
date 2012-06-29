@@ -4,6 +4,8 @@
  */
 package score;
 
+import java.io.File;
+
 import net.sourceforge.jFuzzyLogic.FIS;
 
 /**
@@ -15,23 +17,33 @@ public class AttackScore extends Score {
 
     public AttackScore() {
         super();
-
-        String fileName = "C\\Users\\Renato\\Dev\\demolition\\inf-seal\\src\\score\\attack.fcl";
+        
+                
+        //TODO checar directory separator em JAVA
+        
+        String fileName = "bin/score/attack.fcl";
+        
         this.fis = FIS.load(fileName, true);
 
         if (this.fis == null) {
             System.err.println("Can't load file: '" + fileName + "'");
         }
+        
+        //xfis.chart();
     }
 
     @Override
-    public double getScore(float angle, float distance, float direction) {
-        this.fis.setVariable("angle", angle);
-        this.fis.setVariable("distance", distance);
-        this.fis.setVariable("direction", direction);
+    public double getScore(double angle, double distance, double direction) {
+        this.fis.setVariable("angle", Math.abs(angle));
+        this.fis.setVariable("distance", distance/300);
+        this.fis.setVariable("direction", (direction>Math.PI?2*Math.PI-direction:direction));
         this.fis.evaluate();
+        
+        
 
-        return this.fis.getVariable("activate").defuzzify();
+        double score = fis.getVariable("activate").defuzzify();
+        System.out.println("AttackScore:" + score);
+        return score;
     }
     
 }

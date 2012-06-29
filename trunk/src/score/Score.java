@@ -9,5 +9,5 @@ package score;
  * @author Renato
  */
 public abstract class Score {
-    public abstract double getScore(float angle, float distance, float direction);
+    public abstract double getScore(double angle, double distance, double direction);
 }
