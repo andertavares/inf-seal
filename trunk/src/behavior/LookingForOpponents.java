@@ -28,4 +28,7 @@ public class LookingForOpponents extends Behavior {
 		return a;
 	}
 	
+	public String toString(){
+		return "Looking for opponents";
+	}
 }

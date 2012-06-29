@@ -25,6 +25,8 @@ public class SealBot extends Controller {
 	private Vector<Car> opponentData;
 	private SensorModel mySensors;
 	
+	int printFrequency;
+	
 	final int[]  gearUp = {8500,9000,9500,9500,9500,0}; //Renato
 	final int[]  gearDown = {0,3300,6200,7000,7300,7700};
 	
@@ -48,12 +50,13 @@ public class SealBot extends Controller {
 	public SealBot(){
 		behaviorList = new ArrayList<Behavior>();
 		opponentData = new Vector<Car>();
-		//TODO: adicionar no behaviorList um item pra cada comportamento
 		
 		behaviorList.add(new LookingForOpponents());
 		behaviorList.add(new Attack());
 		behaviorList.add(new Evade());
 		behaviorList.add(new Stuck());
+		
+		printFrequency = 0;
 	}
 
 	@Override
@@ -80,10 +83,17 @@ public class SealBot extends Controller {
 			return new Action();
 		}
 		Action a = bestBehavior.control(sensors);
-		System.out.println("behavior: " + bestBehavior );
+		//System.out.println("behavior: " + bestBehavior );
 		
+		printFrequency++;
+		if (printFrequency > 10){
+			System.out.println("Behavior: " + bestBehavior);
+			System.out.println(
+				"SEAL damage:" + sensors.getDamage() + " others' damage: " + sensors.getOtherdamage()
+			);
+			printFrequency = 0;
+		}
 		
-		//a.clutch = clutching(sensors, );
 		if(! (bestBehavior instanceof Stuck))
 			a.gear = getGear(sensors);
 		
