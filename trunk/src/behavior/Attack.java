@@ -1,5 +1,7 @@
 package behavior;
 
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Vector;
 
 import score.AttackScore;
@@ -33,13 +35,70 @@ public class Attack extends Behavior {
 
 	@Override
 	public Action control(SensorModel sensors) {
-		
-		//angle = sensor['minOpponentsAngle']
-		Action action = new Action();
-        action.accelerate = 1;
-        action.steering = - highestScore.getAngle() / Math.PI;
-
-        return action;
+            
+            //angle = sensor['minOpponentsAngle']
+            Action action = new Action();
+//            double C1,C2,d,V,Vx,Vy,Vop,alpha,gamma,teta,Ta;
+//            double Vr[] = new double[2];
+//            double Sr[] = new double[2];
+//            double Sf[] = new double[2];
+//            
+//            alpha = Math.toDegrees(highestScore.getAngle());
+//            gamma = 90 - alpha;
+//            V = sensors.getSpeed();
+//            d = highestScore.getDistance();
+//            
+//            Vop = highestScore.getVelocity(); sensors.
+//            teta = Math.toDegrees(highestScore.getDirection());
+//            Vx = Vop*Math.sin(teta);
+//            Vy = Vop*Math.cos(teta);
+//
+//            Vr[0] = Vx;
+//            Vr[1] = Vy - V;
+//            
+//            C1 = Math.cos(gamma)*d;
+//            C2 = Math.sin(gamma)*d;
+//            
+//            Sr[0] = C1;
+//            Sr[1] = C2;
+//            
+//            Ta = Math.sqrt(Math.pow(Sr[0], 2) + Math.pow(Sr[1],2)) / 
+//                    Math.sqrt(Math.pow(Vr[0], 2) + Math.pow(Vr[1],2));
+//            
+//            Sf[0] = C1 + (Vx*Ta);
+//            Sf[1] = C2 + (Vy*Ta);
+//            
+//            DecimalFormat df = new DecimalFormat("0.##");
+            //System.out.println(df.format(Vop) + "\t" + df.format(V));
+            //System.out.println(df.format(Sf) + "\t" + df.format(Ta));
+            double dist,alpha,vel,posx,posy,posxf,posyf,dirx,diry,t,dir,alphaf;
+            dist = highestScore.getDistance();
+            dir = highestScore.getDirection();
+            alpha = highestScore.getAngle();
+            posx = Math.cos(alpha)*dist;
+            posy = Math.sin(alpha)*dist;
+            
+            dirx = Math.sin(dir);
+            diry = -Math.cos(dir);
+            
+            vel = highestScore.getRelativeVelocity();
+            
+            t = 5;//dist/vel;
+            
+            posxf = posx + dirx*vel*t;
+            posyf = posy + diry*vel*t;
+            
+            alphaf = Math.atan2(posyf, posxf);
+            
+            System.out.println(alphaf + "\t" + alpha);
+            
+            if (alphaf > 0) action.steering = -1;
+            else            action.steering = 1;
+            
+            action.accelerate = 0.8;
+            
+            
+            return action;
 		
 		/*
 		Vector u;
