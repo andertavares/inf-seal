@@ -16,7 +16,7 @@ public class EvadeScore extends Score {
     public EvadeScore() {
         super();
 
-        String fileName = "bin/score/evade.fcl";
+        String fileName = "rules/evade.fcl";
         this.fis = FIS.load(fileName, true);
 
         if (this.fis == null) {

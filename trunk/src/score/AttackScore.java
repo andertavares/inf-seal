@@ -21,7 +21,7 @@ public class AttackScore extends Score {
                 
         //TODO checar directory separator em JAVA
         
-        String fileName = "bin/score/attack.fcl";
+        String fileName = "rules/attack.fcl";
         
         this.fis = FIS.load(fileName, true);
 
