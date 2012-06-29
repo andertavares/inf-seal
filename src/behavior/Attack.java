@@ -2,20 +2,33 @@ package behavior;
 
 import java.util.Vector;
 
+import score.AttackScore;
 import sealbot.Action;
 import sealbot.Car;
 import sealbot.SensorModel;
 
 public class Attack extends Behavior {
 	
+	AttackScore as;
 	
-
+	public Attack(){
+		as = new AttackScore();
+	}
+	
 	@Override
 	public double score(SensorModel sensors, Vector<Car> opponentData) {
-		// TODO Auto-generated method stub
+		double maxScore = -1;
+		highestScore = null;
 		
-		highestScore = opponentData.firstElement();
-		return 1;
+		for(Car c : opponentData){
+			double currentScore = as.getScore(c.getAngle(), c.getDistance(), c.getDirection());
+			if(currentScore > maxScore){
+				maxScore = currentScore;
+				highestScore = c;		
+			}
+		}
+		
+		return maxScore;
 	}
 
 	@Override
@@ -48,6 +61,10 @@ public class Attack extends Behavior {
 		Predator.SetThrusters(left, right); //ajusta a direção
 		*/
 		
+	}
+	
+	public String toString(){
+		return "Attack";
 	}
 
 }

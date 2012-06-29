@@ -16,7 +16,7 @@ public class EvadeScore extends Score {
     public EvadeScore() {
         super();
 
-        String fileName = "C\\Users\\Renato\\Dev\\demolition\\inf-seal\\src\\score\\evade.fcl";
+        String fileName = "bin/score/evade.fcl";
         this.fis = FIS.load(fileName, true);
 
         if (this.fis == null) {
@@ -25,10 +25,10 @@ public class EvadeScore extends Score {
     }
 
     @Override
-    public double getScore(float angle, float distance, float direction) {
-        this.fis.setVariable("angle", angle);
-        this.fis.setVariable("distance", distance);
-        this.fis.setVariable("direction", direction);
+    public double getScore(double angle, double distance, double direction) {
+        this.fis.setVariable("angle", Math.abs(angle));
+        this.fis.setVariable("distance", distance/300);
+        this.fis.setVariable("direction", (direction>Math.PI?2*Math.PI-direction:direction));
         this.fis.evaluate();
 
         return this.fis.getVariable("activate").defuzzify();

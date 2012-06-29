@@ -10,7 +10,9 @@ import java.util.Vector;
 
 import behavior.Attack;
 import behavior.Behavior;
+import behavior.Evade;
 import behavior.LookingForOpponents;
+import behavior.Stuck;
 
 /**
  * The SealBot
@@ -23,8 +25,8 @@ public class SealBot extends Controller {
 	private Vector<Car> opponentData;
 	private SensorModel mySensors;
 	
-	final int[]  gearUp={8500,9000,9500,9500,9500,0}; //Renato
-	final int[]  gearDown={0,3300,6200,7000,7300,7700};
+	final int[]  gearUp = {8500,9000,9500,9500,9500,0}; //Renato
+	final int[]  gearDown = {0,3300,6200,7000,7300,7700};
 	
 	//final int[]  gearUp={9500,9500,9500,10000,10000,0}; //Gabriel
 	//final int[]  gearDown={0,2500,3000,3000,3500,3500};
@@ -50,6 +52,8 @@ public class SealBot extends Controller {
 		
 		behaviorList.add(new LookingForOpponents());
 		behaviorList.add(new Attack());
+		behaviorList.add(new Evade());
+		behaviorList.add(new Stuck());
 	}
 
 	@Override
@@ -76,11 +80,12 @@ public class SealBot extends Controller {
 			return new Action();
 		}
 		Action a = bestBehavior.control(sensors);
-		System.out.println("vel:" + sensors.getSpeed());
+		System.out.println("behavior: " + bestBehavior );
 		
 		
 		//a.clutch = clutching(sensors, );
-		a.gear = getGear(sensors);
+		if(! (bestBehavior instanceof Stuck))
+			a.gear = getGear(sensors);
 		
 		return a;
 	}
