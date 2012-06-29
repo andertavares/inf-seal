@@ -83,17 +83,21 @@ public class Attack extends Behavior {
             
             vel = highestScore.getRelativeVelocity();
             
-            t = 5;//dist/vel;
+            t = dist / 10;
             
             posxf = posx + dirx*vel*t;
             posyf = posy + diry*vel*t;
             
             alphaf = Math.atan2(posyf, posxf);
             
-            System.out.println(alphaf + "\t" + alpha);
+            //System.out.println(alphaf + "\t" + alpha + "\t" + t);
             
-            if (alphaf > 0) action.steering = -1;
-            else            action.steering = 1;
+            //if (alphaf > 0) action.steering = - alphaf * 4/ Math.PI;
+            //else            action.steering = alphaf * 4 / Math.PI;
+            
+            action.steering = - alphaf * 4/ Math.PI;
+            
+            System.out.println(alphaf + "\t" + alpha + "\t" + t + "\t" + action.steering);
             
             action.accelerate = 0.8;
             
