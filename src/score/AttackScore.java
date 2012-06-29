@@ -42,7 +42,6 @@ public class AttackScore extends Score {
         
 
         double score = fis.getVariable("activate").defuzzify();
-        System.out.println("AttackScore:" + score);
         return score;
     }
     

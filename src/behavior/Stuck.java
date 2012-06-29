@@ -56,8 +56,8 @@ public class Stuck extends Behavior {
 	}
 	
 	public String toString(){
-		return "Stuck. stuckFor=" + stuckFor + ", gear = " + theAction.gear + ", accel= " 
-		+ theAction.accelerate + ", steer=" + theAction.steering;
+		return "Stuck";/*. stuckFor=" + stuckFor + ", gear = " + theAction.gear + ", accel= " 
+		+ theAction.accelerate + ", steer=" + theAction.steering;*/
 	}
 
 }
