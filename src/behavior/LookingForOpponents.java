@@ -10,9 +10,6 @@ public class LookingForOpponents extends Behavior {
 
 	@Override
 	public double score(SensorModel sensors, Vector<Car> opponentData) {
-		// TODO Auto-generated method stub
-		
-		
 		return 0;
 	}
 
@@ -22,7 +19,7 @@ public class LookingForOpponents extends Behavior {
 		
 		//angle = sensor['minOpponentsAngle'];
 		
-		a.accelerate = 1;
+		a.accelerate = 0.7;
         a.steering = getSteer(sensors);
 		
 		return a;

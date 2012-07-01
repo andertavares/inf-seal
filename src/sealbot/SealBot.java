@@ -89,7 +89,7 @@ public class SealBot extends Controller {
 		if (printFrequency > 10){
 			System.out.println("Behavior: " + bestBehavior);
 			System.out.println(
-				"SEAL damage:" + sensors.getDamage() + " others' damage: " + sensors.getOtherdamage()
+				"SEAL damage: " + sensors.getDamage() + " / Others' damage: " + sensors.getOtherdamage()
 			);
 			printFrequency = 0;
 		}
