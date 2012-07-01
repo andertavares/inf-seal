@@ -85,8 +85,8 @@ public class Attack extends Behavior {
             
             t = dist / 10;
             
-            posxf = posx + dirx*vel*t;
-            posyf = posy + diry*vel*t;
+            posxf = posx + dirx * vel * t;
+            posyf = posy + diry * vel * t;
             
             alphaf = Math.atan2(posyf, posxf);
             
@@ -95,16 +95,13 @@ public class Attack extends Behavior {
             if (alphaf > 0) action.steering = - 1;
             else            action.steering = 1;
             
-            //action.steering = - alphaf * 4/ Math.PI;
-//            action.steering = - alphaf * 1.4;// * 4/ Math.PI;
-            
             action.accelerate = 0.8;
             
             if (Math.abs(alphaf) < 0.2) {
             	action.steering = -alphaf;
             	action.accelerate = 1;
             }
-            else if (Math.abs(alphaf) > 0.6) {
+            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() < 50) {
             	action.accelerate = 0;
             }
             System.out.printf(
