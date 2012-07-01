@@ -92,14 +92,32 @@ public class Attack extends Behavior {
             
             //System.out.println(alphaf + "\t" + alpha + "\t" + t);
             
-            //if (alphaf > 0) action.steering = - alphaf * 4/ Math.PI;
-            //else            action.steering = alphaf * 4 / Math.PI;
+            if (alphaf > 0) action.steering = - 1;
+            else            action.steering = 1;
             
-            action.steering = - alphaf * 4/ Math.PI;
-            
-            System.out.println(alphaf + "\t" + alpha + "\t" + t + "\t" + action.steering);
+            //action.steering = - alphaf * 4/ Math.PI;
+//            action.steering = - alphaf * 1.4;// * 4/ Math.PI;
             
             action.accelerate = 0.8;
+            
+            if (Math.abs(alphaf) < 0.2) {
+            	action.steering = -alphaf;
+            	action.accelerate = 1;
+            }
+            else if (Math.abs(alphaf) > 0.6) {
+            	action.accelerate = 0;
+            }
+            System.out.printf(
+        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
+        		alphaf,alpha,t,action.steering,action.accelerate,sensors.getSpeed()
+        	);
+            
+            /*System.out.println(
+        		alphaf + "\t" + alpha + "\t" + t + "\t" + action.steering
+        		+ "\t" + action.accelerate + "\t" + sensors.getSpeed()
+        	);*/
+            
+            
             
             
             return action;
