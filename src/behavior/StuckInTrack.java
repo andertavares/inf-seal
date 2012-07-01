@@ -6,17 +6,17 @@ import sealbot.Action;
 import sealbot.Car;
 import sealbot.SensorModel;
 
-public class Stuck extends Behavior {
+public class StuckInTrack extends Behavior {
 	
 	private int stuckFor;
 	
 	private boolean isStuck;
 	
-	private final int THRESHOLD = 100;
+	private final int THRESHOLD = 300;
 	
 	Action theAction;
 	
-	public Stuck(){
+	public StuckInTrack(){
 		stuckFor = 0;
 		theAction = new Action();
 	}
