@@ -29,7 +29,6 @@ public class Attack extends Behavior {
 				highestScore = c;		
 			}
 		}
-		
 		return maxScore;
 	}
 
@@ -75,8 +74,9 @@ public class Attack extends Behavior {
             dist = highestScore.getDistance();
             dir = highestScore.getDirection();
             alpha = highestScore.getAngle();
-            posx = Math.cos(alpha)*dist;
-            posy = Math.sin(alpha)*dist;
+            
+            posy = Math.cos(alpha)*dist;
+            posx = Math.sin(alpha)*dist;
             
             dirx = Math.sin(dir);
             diry = -Math.cos(dir);
@@ -90,6 +90,34 @@ public class Attack extends Behavior {
             
             alphaf = Math.atan2(posyf, posxf);
             
+            //NOVA TENTATIVA DE CALCULO DO ALPHAF
+            double v, vx, vy, pfx, pfy, dx, dy, approachTime;
+            
+            //vr_x = highestScore.getVelocity();
+            
+            double vr = highestScore.getRelativeVelocity() == 0.0 ? 1 : highestScore.getRelativeVelocity();
+            approachTime = Math.abs( highestScore.getDistance() / vr );
+            
+            if(approachTime < 0) {
+            	approachTime = highestScore.getDistance() / 10;
+            	System.out.print("a");
+            }
+            
+            if(approachTime > 100){
+            	approachTime = 100;
+            	System.out.print("d");
+            }
+            
+            v = highestScore.getVelocity();
+            vx = v * Math.sin(2 * Math.PI - highestScore.getDirection());
+            vy = v * Math.cos(2 * Math.PI - highestScore.getDirection());
+            
+            
+            pfx = posx + vx * approachTime;
+            pfy = posy + vy * approachTime;
+            
+            alphaf = Math.atan2(pfx, pfy);
+            
             //System.out.println(alphaf + "\t" + alpha + "\t" + t);
             
             if (alphaf > 0) action.steering = - 1;
@@ -101,19 +129,31 @@ public class Attack extends Behavior {
             	action.steering = -alphaf;
             	action.accelerate = 1;
             }
-            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() < 50) {
+            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
             	action.accelerate = 0;
             }
+            /*
             System.out.printf(
         		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
         		alphaf,alpha,t,action.steering,action.accelerate,sensors.getSpeed()
         	);
-            
+            */
             /*System.out.println(
         		alphaf + "\t" + alpha + "\t" + t + "\t" + action.steering
         		+ "\t" + action.accelerate + "\t" + sensors.getSpeed()
+        	);
+            
+            System.out.printf(
+        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
+        		alphaf,alpha,approachTime,posx,posy,pfx,pfy,vx,vy,
+        		highestScore.getDirection(),highestScore.getAngle()
         	);*/
             
+            System.out.printf(
+        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
+        		alphaf,alpha,approachTime,vx,vy,vr
+        		//highestScore.getDirection(),highestScore.getAngle()
+        	);
             
             
             
