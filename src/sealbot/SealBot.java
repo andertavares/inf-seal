@@ -12,6 +12,7 @@ import behavior.Attack;
 import behavior.Behavior;
 import behavior.Evade;
 import behavior.LookingForOpponents;
+import behavior.StuckInOpponent;
 import behavior.StuckInTrack;
 
 /**
@@ -55,6 +56,7 @@ public class SealBot extends Controller {
 		behaviorList.add(new Attack());
 		behaviorList.add(new Evade());
 		behaviorList.add(new StuckInTrack());
+		behaviorList.add(new StuckInOpponent());
 		
 		printFrequency = 0;
 	}
