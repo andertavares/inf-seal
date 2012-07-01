@@ -1,6 +1,7 @@
 package behavior;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
@@ -12,9 +13,20 @@ import sealbot.SensorModel;
 public class Attack extends Behavior {
 	
 	AttackScore as;
+	Vector<Double> Vx, Vy;
+	int size = 5;
 	
 	public Attack(){
 		as = new AttackScore();
+		Vx = new Vector<Double>();
+		Vy = new Vector<Double>();
+		
+		for (int i = 0; i < size; i++) {
+			Vx.add(0.);
+			Vy.add(0.);
+		}
+		Vx.setSize(size);
+		Vy.setSize(size);
 	}
 	
 	@Override
@@ -103,35 +115,47 @@ public class Attack extends Behavior {
             	System.out.print("a");
             }
             
-            if(approachTime > 100){
-            	approachTime = 100;
+            if(approachTime > 20){
+            	approachTime = 20;
             	System.out.print("d");
             }
             
             v = highestScore.getVelocity();
             vx = v * Math.sin(2 * Math.PI - highestScore.getDirection());
             vy = v * Math.cos(2 * Math.PI - highestScore.getDirection());
+			Vx.add(vx); Vx.removeElementAt(0);
+			Vy.add(vy); Vy.removeElementAt(0);
+			Vector<Double> Vxc = (Vector<Double>) Vx.clone();
+			Vector<Double> Vyc = (Vector<Double>) Vy.clone();
+			Collections.sort(Vxc);
+			Collections.sort(Vyc);
+			vx = Vxc.get(2);
+			vy = Vyc.get(2);
             
             
             pfx = posx + vx * approachTime;
             pfy = posy + vy * approachTime;
             
             alphaf = Math.atan2(pfx, pfy);
+			//if (Math.abs(alphaf) < 0.1) alphaf = 0.;
             
             //System.out.println(alphaf + "\t" + alpha + "\t" + t);
             
-            if (alphaf > 0) action.steering = - 1;
-            else            action.steering = 1;
-            
+			action.steering = -alphaf;
+//            if (alphaf > 0) action.steering = - 1;
+//            else            action.steering = 1;
+//            
             action.accelerate = 0.8;
-            
-            if (Math.abs(alphaf) < 0.2) {
-            	action.steering = -alphaf;
-            	action.accelerate = 1;
-            }
-            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
-            	action.accelerate = 0;
-            }
+			if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) action.accelerate = 0.2;
+			if (Math.abs(alphaf) < 0.2) action.accelerate = 1.;
+//            
+//            if (Math.abs(alphaf) < 0.2) {
+//            	action.steering = -alphaf/5;
+//            	action.accelerate = 1;
+//            }
+//            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
+//            	action.accelerate = 0;
+//            }
             /*
             System.out.printf(
         		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
@@ -149,11 +173,11 @@ public class Attack extends Behavior {
         		highestScore.getDirection(),highestScore.getAngle()
         	);*/
             
-            System.out.printf(
-        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
-        		alphaf,alpha,approachTime,vx,vy,vr
-        		//highestScore.getDirection(),highestScore.getAngle()
-        	);
+//            System.out.printf(
+//        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
+//        		alphaf,alpha,approachTime,vx,vy,vr,highestScore.getDistance(),highestScore.getDirection(),highestScore.getAngle()
+//        		,action.accelerate,action.steering
+//        	);
             
             
             
