@@ -12,7 +12,7 @@ import behavior.Attack;
 import behavior.Behavior;
 import behavior.Evade;
 import behavior.LookingForOpponents;
-import behavior.Stuck;
+import behavior.StuckInTrack;
 
 /**
  * The SealBot
@@ -54,7 +54,7 @@ public class SealBot extends Controller {
 		behaviorList.add(new LookingForOpponents());
 		behaviorList.add(new Attack());
 		behaviorList.add(new Evade());
-		behaviorList.add(new Stuck());
+		behaviorList.add(new StuckInTrack());
 		
 		printFrequency = 0;
 	}
@@ -89,12 +89,12 @@ public class SealBot extends Controller {
 		if (printFrequency > 10){
 			System.out.println("Behavior: " + bestBehavior);
 			System.out.println(
-				"SEAL damage: " + sensors.getDamage() + " / Others' damage: " + sensors.getOtherdamage()
+				"SEAL dmg: " + sensors.getDamage() + " / Enemy dmg: " + sensors.getOtherdamage()
 			);
 			printFrequency = 0;
 		}
 		
-		if(! (bestBehavior instanceof Stuck))
+		if(! (bestBehavior instanceof StuckInTrack))
 			a.gear = getGear(sensors);
 		
 		return a;
