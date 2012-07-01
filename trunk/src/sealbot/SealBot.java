@@ -52,11 +52,11 @@ public class SealBot extends Controller {
 		behaviorList = new ArrayList<Behavior>();
 		opponentData = new Vector<Car>();
 		
-		//behaviorList.add(new LookingForOpponents());
+		behaviorList.add(new LookingForOpponents());
 		behaviorList.add(new Attack());
-		//behaviorList.add(new Evade());
+		behaviorList.add(new Evade());
 		behaviorList.add(new StuckInTrack());
-		//behaviorList.add(new StuckInOpponent());
+		behaviorList.add(new StuckInOpponent());
 		
 		printFrequency = 0;
 	}
@@ -100,6 +100,7 @@ public class SealBot extends Controller {
 			a.gear = getGear(sensors);
 		
 		return a;
+		//return new Action();
 	}
 	
 	float clutching(SensorModel sensors, float clutch)
