@@ -117,7 +117,6 @@ public class Attack extends Behavior {
             
             if(approachTime > 20){
             	approachTime = 20;
-            	System.out.print("d");
             }
             
             v = highestScore.getVelocity();
@@ -137,26 +136,16 @@ public class Attack extends Behavior {
             pfy = posy + vy * approachTime;
             
             alphaf = Math.atan2(pfx, pfy);
-			//if (Math.abs(alphaf) < 0.1) alphaf = 0.;
-            
-            //System.out.println(alphaf + "\t" + alpha + "\t" + t);
             
 			action.steering = -alphaf;
-//            if (alphaf > 0) action.steering = - 1;
-//            else            action.steering = 1;
-//            
             action.accelerate = 0.8;
-			if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) action.accelerate = 0.2;
+            
+			if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
+				action.accelerate = 0; //makes a sharp turn
+			}
 			if (Math.abs(alphaf) < 0.2) action.accelerate = 1.;
-//            
-//            if (Math.abs(alphaf) < 0.2) {
-//            	action.steering = -alphaf/5;
-//            	action.accelerate = 1;
-//            }
-//            else if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
-//            	action.accelerate = 0;
-//            }
-            /*
+
+			/*
             System.out.printf(
         		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
         		alphaf,alpha,t,action.steering,action.accelerate,sensors.getSpeed()
