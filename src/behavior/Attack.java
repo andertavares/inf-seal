@@ -42,51 +42,25 @@ public class Attack extends Behavior {
 		for(Car c : opponentData){
 			double currentScore = as.getScore(c.getAngle(), c.getDistance(), c.getDirection());
 			if(currentScore > maxScore){
+				
+				System.out.printf("(opp %.2f) ",currentScore);
+				
+				if(currentScore > 0.6) 
+					System.out.printf("\n%.2f %.2f %.2f\n", c.getAngle(), c.getDistance(), c.getDirection());
+				
 				maxScore = currentScore;
 				highestScore = c;		
 			}
 		}
+		System.out.println("HS: " + maxScore);
 		return maxScore;
 	}
 
 	@Override
 	public Action control(SensorModel sensors) {
             
-            //angle = sensor['minOpponentsAngle']
             Action action = new Action();
-//            double C1,C2,d,V,Vx,Vy,Vop,alpha,gamma,teta,Ta;
-//            double Vr[] = new double[2];
-//            double Sr[] = new double[2];
-//            double Sf[] = new double[2];
-//            
-//            alpha = Math.toDegrees(highestScore.getAngle());
-//            gamma = 90 - alpha;
-//            V = sensors.getSpeed();
-//            d = highestScore.getDistance();
-//            
-//            Vop = highestScore.getVelocity(); sensors.
-//            teta = Math.toDegrees(highestScore.getDirection());
-//            Vx = Vop*Math.sin(teta);
-//            Vy = Vop*Math.cos(teta);
-//
-//            Vr[0] = Vx;
-//            Vr[1] = Vy - V;
-//            
-//            C1 = Math.cos(gamma)*d;
-//            C2 = Math.sin(gamma)*d;
-//            
-//            Sr[0] = C1;
-//            Sr[1] = C2;
-//            
-//            Ta = Math.sqrt(Math.pow(Sr[0], 2) + Math.pow(Sr[1],2)) / 
-//                    Math.sqrt(Math.pow(Vr[0], 2) + Math.pow(Vr[1],2));
-//            
-//            Sf[0] = C1 + (Vx*Ta);
-//            Sf[1] = C2 + (Vy*Ta);
-//            
-//            DecimalFormat df = new DecimalFormat("0.##");
-            //System.out.println(df.format(Vop) + "\t" + df.format(V));
-            //System.out.println(df.format(Sf) + "\t" + df.format(Ta));
+
             double dist,alpha,vel,posx,posy,posxf,posyf,dirx,diry,t,dir,alphaf;
             dist = highestScore.getDistance();
             dir = highestScore.getDirection();
@@ -110,18 +84,15 @@ public class Attack extends Behavior {
             //NOVA TENTATIVA DE CALCULO DO ALPHAF
             double v, vx, vy, pfx, pfy, dx, dy, approachTime;
             
-            //vr_x = highestScore.getVelocity();
-            
             double vr = highestScore.getRelativeVelocity() == 0.0 ? 1 : highestScore.getRelativeVelocity();
             approachTime = Math.abs( highestScore.getDistance() / vr );
             
             if(approachTime < 0) {
             	approachTime = highestScore.getDistance() / 10;
-            	System.out.print("a");
             }
             
-            if(approachTime > 30){
-            	approachTime = 30;
+            if(approachTime > 20){
+            	approachTime = 20;
             }
             
             v = highestScore.getVelocity();
@@ -144,6 +115,7 @@ public class Attack extends Behavior {
             Alphaf.add(alphaf); Alphaf.removeElementAt(0);
             
             alphaf = alpha;//mean(Alphaf);
+            
 			action.steering = -alphaf;//;
             action.accelerate = 0.8;
             
@@ -152,7 +124,6 @@ public class Attack extends Behavior {
 			}
 			if (Math.abs(alphaf) < 0.2) {
 				action.accelerate = 1.;
-				//action.steering = -alphaf / 2;
 			}
 
 			/*
@@ -177,30 +148,8 @@ public class Attack extends Behavior {
 //        		alphaf,alpha,approachTime,vx,vy,vr,highestScore.getDistance(),highestScore.getDirection(),highestScore.getAngle()
 //        		,action.accelerate,action.steering
 //        	);
-            
-            
-            
             return action;
 		
-		/*
-		Vector u;
-		Bool left = false;Bool right = false;
-		//Vector Vr, Sr, St; velocidade relativa, posicao relativa, 
-		
-		double tcVr = highestScore.getRelativeVelocity();// Prey.vVelocity - Predator.vVelocity;
-		double dist = highestScore.getDistance(); //Sr = Prey.vPosition - Predator.vPosition;
-		
-		double approachTime = dist / tcVr;		//Ta = Sr.Magnitude() / Vr.Magnitude();
-				
-		Sf = Prey.vPosition + (Prey.vVelocity * Ta);
-		u = VRotate2D(-Predator.fOrientation,(Sf - Predator.vPosition));
-		//daqui em diante, permanece o mesmo código do algoritmo anterior
-		u.Normalize();if (u.x < -_TOL)
-			left = true;
-		else if (u.x > _TOL)
-				right = true;
-		Predator.SetThrusters(left, right); //ajusta a direção
-		*/
 		
 	}
 	
@@ -213,7 +162,7 @@ public class Attack extends Behavior {
 	}
 	
 	public String toString(){
-		return "Attack";
+		return "ATK";
 	}
 
 }

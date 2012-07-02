@@ -90,7 +90,7 @@ public class StuckInOpponent extends Behavior {
 	}
 	
 	public String toString() {
-		return "Stuck in Opponent";
+		return "SO";
 	}
 
 }

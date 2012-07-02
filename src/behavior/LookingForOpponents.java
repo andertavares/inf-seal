@@ -26,6 +26,6 @@ public class LookingForOpponents extends Behavior {
 	}
 	
 	public String toString(){
-		return "Looking for opponents";
+		return "LFO";
 	}
 }

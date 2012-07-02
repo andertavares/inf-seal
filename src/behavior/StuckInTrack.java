@@ -73,7 +73,7 @@ public class StuckInTrack extends Behavior {
 	}
 	
 	public String toString(){
-		return "Stuck in track. " + minCenterDist  + ", " + stuckFor;/*. stuckFor=" + stuckFor + ", gear = " + theAction.gear + ", accel= " 
+		return "ST";/*. stuckFor=" + stuckFor + ", gear = " + theAction.gear + ", accel= " 
 		+ theAction.accelerate + ", steer=" + theAction.steering;*/
 	}
 	
