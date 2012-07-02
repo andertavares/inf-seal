@@ -27,7 +27,7 @@ public class SealBot extends Controller {
 	private Vector<Car> opponentData;
 	private SensorModel mySensors;
 	
-	int printFrequency;
+	int printCounter;
 	
 	final int[]  gearUp = {8500,9000,9500,9500,9500,0}; //Renato
 	final int[]  gearDown = {0,3300,6200,7000,7300,7700};
@@ -49,6 +49,8 @@ public class SealBot extends Controller {
 	final float clutchMaxModifier=(float) 1.3;
 	final float clutchMaxTime=(float) 1.5;
 	
+	double lastDamage;
+	
 	public SealBot(){
 		behaviorList = new ArrayList<Behavior>();
 		opponentData = new Vector<Car>();
@@ -60,7 +62,7 @@ public class SealBot extends Controller {
 		behaviorList.add(new StuckInTrack());
 		behaviorList.add(new StuckInOpponent());
 		
-		printFrequency = 0;
+		printCounter = 0;
 	}
 
 	@Override
@@ -70,6 +72,12 @@ public class SealBot extends Controller {
 		
 		//updates opponent status given new sensor readings
 		updateOpponents(sensors.getOpponentSensors());
+		
+		if(lastDamage > sensors.getDamage()){
+			//sensor cleanup
+			opponentData.clear();
+		}
+		lastDamage = sensors.getDamage();
 		
 		//searches for the best behavior (highest score) on the list
 		Behavior bestBehavior = null;
@@ -81,34 +89,27 @@ public class SealBot extends Controller {
 				bestBehavior = b;
 				bestScore = currentScore;
 			}
-			//System.out.printf("(" + b + " %.2f) ",b.score(sensors, opponentData));
 		}
-		//System.out.println();
 		if (bestBehavior == null) {
 			System.out.println("Warning: no best behavior was found");
 			return new Action();
 		}
 		Action a = bestBehavior.control(sensors);
-		//System.out.println("behavior: " + bestBehavior );
 		
-		printFrequency++;
-		if (printFrequency > 10){
+		printCounter++;
+		if (printCounter > 20){
 			System.out.println("Behavior: " + bestBehavior);
 			System.out.println(
 				"SEAL dmg: " + sensors.getDamage() + " / Enemy dmg: " + sensors.getOtherdamage()
 			);
-			System.out.println(a);
-			printFrequency = 0;
+			//System.out.println(a);
+			printCounter = 0;
 		}
 		
 		if(! (bestBehavior instanceof StuckInTrack))
 			a.gear = getGear(sensors);
 		
-		//POG
-		//if(a.accelerate > 0.3)
-			//a.accelerate = 0.3;
 		return a;
-		//return new Action();
 	}
 	
 	float clutching(SensorModel sensors, float clutch)
@@ -187,7 +188,7 @@ public class SealBot extends Controller {
 	}
 	
 	/** 
-	 * METODO DO COBOSTAR
+	 * COBOSTAR method
 	 * Updates the opponents that are currently perceived around the car. 
 	 * 
 	 * @param opponents The opponents distances as double.

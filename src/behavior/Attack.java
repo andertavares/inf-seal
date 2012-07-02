@@ -42,17 +42,10 @@ public class Attack extends Behavior {
 		for(Car c : opponentData){
 			double currentScore = as.getScore(c.getAngle(), c.getDistance(), c.getDirection());
 			if(currentScore > maxScore){
-				
-				System.out.printf("(opp %.2f) ",currentScore);
-				
-				if(currentScore > 0.6) 
-					System.out.printf("\n%.2f %.2f %.2f\n", c.getAngle(), c.getDistance(), c.getDirection());
-				
 				maxScore = currentScore;
 				highestScore = c;		
 			}
 		}
-		System.out.println("HS: " + maxScore);
 		return maxScore;
 	}
 
@@ -107,7 +100,6 @@ public class Attack extends Behavior {
 			vx = Vxc.get(2);
 			vy = Vyc.get(2);
             
-            
             pfx = posx + vx * approachTime;
             pfy = posy + vy * approachTime;
             
@@ -125,29 +117,6 @@ public class Attack extends Behavior {
 			if (Math.abs(alphaf) < 0.2) {
 				action.accelerate = 1.;
 			}
-
-			/*
-            System.out.printf(
-        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
-        		alphaf,alpha,t,action.steering,action.accelerate,sensors.getSpeed()
-        	);
-            */
-            /*System.out.println(
-        		alphaf + "\t" + alpha + "\t" + t + "\t" + action.steering
-        		+ "\t" + action.accelerate + "\t" + sensors.getSpeed()
-        	);
-            
-            System.out.printf(
-        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
-        		alphaf,alpha,approachTime,posx,posy,pfx,pfy,vx,vy,
-        		highestScore.getDirection(),highestScore.getAngle()
-        	);*/
-            
-//            System.out.printf(
-//        		"%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", 
-//        		alphaf,alpha,approachTime,vx,vy,vr,highestScore.getDistance(),highestScore.getDirection(),highestScore.getAngle()
-//        		,action.accelerate,action.steering
-//        	);
             return action;
 		
 		
