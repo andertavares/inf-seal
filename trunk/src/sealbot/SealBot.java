@@ -56,7 +56,8 @@ public class SealBot extends Controller {
 		behaviorList.add(new Attack());
 		behaviorList.add(new Evade());
 		behaviorList.add(new StuckInTrack());
-		behaviorList.add(new StuckInOpponent());
+		//behaviorList.add(new StuckInOpponent());
+		//behaviorList.add(new Stuck());
 		
 		printFrequency = 0;
 	}

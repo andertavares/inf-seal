@@ -3,6 +3,7 @@ package behavior;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 import score.AttackScore;
@@ -13,20 +14,24 @@ import sealbot.SensorModel;
 public class Attack extends Behavior {
 	
 	AttackScore as;
-	Vector<Double> Vx, Vy;
+	Vector<Double> Vx, Vy, Alphaf;
 	int size = 5;
 	
 	public Attack(){
 		as = new AttackScore();
 		Vx = new Vector<Double>();
 		Vy = new Vector<Double>();
+		Alphaf = new Vector<Double>();
 		
 		for (int i = 0; i < size; i++) {
 			Vx.add(0.);
 			Vy.add(0.);
+			Alphaf.add(0.);
+			
 		}
 		Vx.setSize(size);
 		Vy.setSize(size);
+		Alphaf.setSize(size);
 	}
 	
 	@Override
@@ -115,8 +120,8 @@ public class Attack extends Behavior {
             	System.out.print("a");
             }
             
-            if(approachTime > 20){
-            	approachTime = 20;
+            if(approachTime > 30){
+            	approachTime = 30;
             }
             
             v = highestScore.getVelocity();
@@ -136,14 +141,19 @@ public class Attack extends Behavior {
             pfy = posy + vy * approachTime;
             
             alphaf = Math.atan2(pfx, pfy);
+            Alphaf.add(alphaf); Alphaf.removeElementAt(0);
             
-			action.steering = -alphaf;
+            alphaf = alpha;//mean(Alphaf);
+			action.steering = -alphaf;//;
             action.accelerate = 0.8;
             
 			if (Math.abs(alphaf) > 0.6 && sensors.getSpeed() > 50) {
 				action.accelerate = 0; //makes a sharp turn
 			}
-			if (Math.abs(alphaf) < 0.2) action.accelerate = 1.;
+			if (Math.abs(alphaf) < 0.2) {
+				action.accelerate = 1.;
+				//action.steering = -alphaf / 2;
+			}
 
 			/*
             System.out.printf(
@@ -192,6 +202,14 @@ public class Attack extends Behavior {
 		Predator.SetThrusters(left, right); //ajusta a direção
 		*/
 		
+	}
+	
+	private double mean(List<Double> l){
+		double acc = 0;
+		for (double d : l){
+			acc += d;
+		}
+		return acc / l.size();
 	}
 	
 	public String toString(){
