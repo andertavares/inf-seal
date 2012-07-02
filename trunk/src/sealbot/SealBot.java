@@ -12,6 +12,7 @@ import behavior.Attack;
 import behavior.Behavior;
 import behavior.Evade;
 import behavior.LookingForOpponents;
+import behavior.SideAttack;
 import behavior.StuckInOpponent;
 import behavior.StuckInTrack;
 
@@ -54,10 +55,10 @@ public class SealBot extends Controller {
 		
 		behaviorList.add(new LookingForOpponents());
 		behaviorList.add(new Attack());
+		behaviorList.add(new SideAttack());
 		behaviorList.add(new Evade());
 		behaviorList.add(new StuckInTrack());
-		//behaviorList.add(new StuckInOpponent());
-		//behaviorList.add(new Stuck());
+		behaviorList.add(new StuckInOpponent());
 		
 		printFrequency = 0;
 	}
@@ -80,7 +81,9 @@ public class SealBot extends Controller {
 				bestBehavior = b;
 				bestScore = currentScore;
 			}
+			//System.out.printf("(" + b + " %.2f) ",b.score(sensors, opponentData));
 		}
+		//System.out.println();
 		if (bestBehavior == null) {
 			System.out.println("Warning: no best behavior was found");
 			return new Action();
@@ -94,12 +97,16 @@ public class SealBot extends Controller {
 			System.out.println(
 				"SEAL dmg: " + sensors.getDamage() + " / Enemy dmg: " + sensors.getOtherdamage()
 			);
+			System.out.println(a);
 			printFrequency = 0;
 		}
 		
 		if(! (bestBehavior instanceof StuckInTrack))
 			a.gear = getGear(sensors);
 		
+		//POG
+		//if(a.accelerate > 0.3)
+			//a.accelerate = 0.3;
 		return a;
 		//return new Action();
 	}

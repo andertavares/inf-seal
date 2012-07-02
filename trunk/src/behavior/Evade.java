@@ -12,23 +12,27 @@ public class Evade extends Behavior {
 
 	EvadeScore es;
 	
+	private final double LIFE_THRESHOLD = 6000;
+	
 	public Evade(){
 		es = new EvadeScore();
 	}
 	@Override
 	public double score(SensorModel sensors, Vector<Car> opponentData) {
-		double maxScore = -1;
+		double oppScore = -1;
 		highestScore = null;
 		
 		for(Car c : opponentData){
 			double currentScore = es.getScore(c.getAngle(), c.getDistance(), c.getDirection());
-			if(currentScore > maxScore){
-				maxScore = currentScore;
+			if(currentScore > oppScore){
+				oppScore = currentScore;
 				highestScore = c;		
 			}
 		}
 		
-		return maxScore;
+		if(sensors.getDamage() > LIFE_THRESHOLD && oppScore > 0) return 1;
+		
+		return oppScore;
 	}
 
 	@Override
@@ -46,7 +50,7 @@ public class Evade extends Behavior {
 	}
 	
 	public String toString(){
-		return "Evade";
+		return "EVD";
 	}
 
 }
