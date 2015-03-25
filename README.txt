@@ -6,7 +6,9 @@ SEAL Demolition Derby controller, by:
 - Sérgio M. Silva
 - Ana L. C. Bazzan
 
-Institute of Informatics - Universidade Federal do Rio Grande do Sul
+Institute of Informatics - Universidade Federal do Rio Grande do Sul.
+
+SEAL bot has won 2012 Demolition Derby Competition! Results here: http://slideshare.net/coboslab/demolition-derby-2012-gecco-competition-report
 
 - To run SEAL Demolition Derby controller:
 
